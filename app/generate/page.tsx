@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,26 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Spinner } from '@/components/ui/spinner';
-import { toast } from 'sonner';
-import { ArrowLeft, Zap } from 'lucide-react';
-import Link from 'next/link';
 
-const FOCUS_AREAS = [
-  'Error Handling',
-  'Input Validation',
-  'Authentication',
-  'Rate Limiting',
-  'Performance',
-  'Data Integrity',
-  'Security',
-];
-
-export default function GeneratePage() {
+function GeneratePageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const [url, setUrl] = useState(searchParams.get('url') || '');
   const [method, setMethod] = useState(searchParams.get('method') || 'GET');
   const [testCount, setTestCount] = useState('5');
@@ -147,7 +132,6 @@ export default function GeneratePage() {
           <p className="text-muted-foreground mb-8">
             Enter your API details and select focus areas for test generation
           </p>
-
           <Card>
             <CardHeader>
               <CardTitle>API Configuration</CardTitle>
@@ -250,6 +234,31 @@ export default function GeneratePage() {
               >
                 {loading ? (
                   <>
+                    <Spinner className="mr-2 h-4 w-4" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Zap className="mr-2 h-4 w-4" />
+                    Generate Test Cases
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default function GeneratePage() {
+  return (
+    <Suspense>
+      <GeneratePageInner />
+    </Suspense>
+  );
+}
                     <Spinner className="mr-2 h-4 w-4" />
                     Generating...
                   </>
