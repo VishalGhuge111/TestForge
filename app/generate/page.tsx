@@ -38,7 +38,7 @@ function GeneratePageInner() {
 
   const handleValidate = async () => {
     if (!url) {
-      toast.error('Please enter an API URL');
+      toast({ title: 'Error', description: 'Please enter an API URL' });
       return;
     }
 
@@ -54,14 +54,14 @@ function GeneratePageInner() {
 
       if (data.valid) {
         setIsValid(true);
-        toast.success('API endpoint is reachable');
+        toast({ title: 'Success', description: 'API endpoint is reachable' });
       } else {
         setIsValid(false);
-        toast.error(data.error || 'API endpoint validation failed');
+        toast({ title: 'Error', description: data.error || 'API endpoint validation failed' });
       }
     } catch (error) {
       setIsValid(false);
-      toast.error('Failed to validate API endpoint');
+      toast({ title: 'Error', description: 'Failed to validate API endpoint' });
     } finally {
       setValidating(false);
     }
@@ -69,12 +69,12 @@ function GeneratePageInner() {
 
   const handleGenerate = async () => {
     if (!url) {
-      toast.error('Please enter an API URL');
+      toast({ title: 'Error', description: 'Please enter an API URL' });
       return;
     }
 
     if (selectedFocusAreas.length === 0) {
-      toast.error('Please select at least one focus area');
+      toast({ title: 'Error', description: 'Please select at least one focus area' });
       return;
     }
 
@@ -105,7 +105,7 @@ function GeneratePageInner() {
       }
 
       const data = await response.json();
-      toast.success(`Generated ${data.count} test cases`);
+      toast({ title: 'Success', description: `Generated ${data.count} test cases` });
       
       // Store test cases and navigate to results
       sessionStorage.setItem('testforge_test_cases', JSON.stringify(data.testCases));
@@ -114,7 +114,7 @@ function GeneratePageInner() {
       
       router.push('/results');
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to generate test cases');
+      toast({ title: 'Error', description: error instanceof Error ? error.message : 'Failed to generate test cases' });
     } finally {
       setLoading(false);
     }
