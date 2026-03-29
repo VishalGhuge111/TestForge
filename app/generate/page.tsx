@@ -234,23 +234,6 @@ function GeneratePageInner() {
               >
                 {loading ? (
                   <>
-// ...existing code...
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </main>
-  );
-}
-
-export default function GeneratePage() {
-  return (
-    <Suspense>
-      <GeneratePageInner />
-    </Suspense>
-  );
-}
                     <Spinner className="mr-2 h-4 w-4" />
                     Generating...
                   </>
@@ -266,5 +249,13 @@ export default function GeneratePage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function GeneratePage() {
+  return (
+    <Suspense>
+      <GeneratePageInner />
+    </Suspense>
   );
 }
