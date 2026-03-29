@@ -3,40 +3,30 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const geist = Geist({ subsets: ['latin'] })
+const geistMono = Geist_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'TestForge - AI-Powered API Test Case Generator',
-  description: 'Generate comprehensive API test cases using AI. Validate your APIs, create test suites, and export results in seconds.',
-  generator: 'v0.app',
+  title: 'TestForge — AI API Testing & Analysis Platform',
+  description:
+    'AI-powered platform to generate, execute, and analyze API test cases with intelligent failure explanations.',
+  applicationName: 'TestForge',
+  authors: [{ name: 'Vishal Ghuge' }],
+
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/logo.jpg',
+    apple: '/logo.jpg',
   },
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased">
+      <body className={`${geist.className} antialiased`}>
         {children}
         <Analytics />
       </body>
