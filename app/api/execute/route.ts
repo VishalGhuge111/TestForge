@@ -10,14 +10,17 @@ async function executeTestCase(testCase: TestCase): Promise<TestResult> {
   const startTime = Date.now();
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
     const response = await fetch(testCase.endpoint, {
       method: testCase.method,
       headers: testCase.headers || {
         'Content-Type': 'application/json',
       },
       body: testCase.body,
+      signal: controller.signal,
     });
-
+    clearTimeout(timeoutId);
     const responseTime = Date.now() - startTime;
     const responseText = await response.text();
 

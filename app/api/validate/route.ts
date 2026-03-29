@@ -15,14 +15,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const spec = APISpecSchema.parse(body);
 
-    // Validate the API spec by making a HEAD or GET request
+    // Validate the API spec by making a HEAD or GET request with timeout
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
       const response = await fetch(spec.url, {
         method: spec.method,
         headers: spec.headers || {},
         body: spec.body ? spec.body : undefined,
-        timeout: 5000,
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       return NextResponse.json({
         valid: true,
