@@ -234,15 +234,7 @@ function GeneratePageInner() {
               >
                 {loading ? (
                   <>
-                    <Spinner className="mr-2 h-4 w-4" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Zap className="mr-2 h-4 w-4" />
-                    Generate Test Cases
-                  </>
-                )}
+// ...existing code...
               </Button>
             </CardContent>
           </Card>
