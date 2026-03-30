@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Select,
   SelectContent,
@@ -14,6 +16,23 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
+import Link from 'next/link';
+
+import { ArrowLeft, Zap } from 'lucide-react';
+
+// Focus areas for test generation
+const FOCUS_AREAS = [
+  'Error Handling',
+  'Input Validation',
+  'Authentication',
+  'Authorization',
+  'Edge Cases',
+  'Performance',
+  'Security',
+  'Data Validation',
+  'Response Structure',
+  'Status Codes',
+];
 
 function GeneratePageInner() {
   const router = useRouter();
@@ -121,7 +140,7 @@ function GeneratePageInner() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+    <main className="min-h-screen bg-linear-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8">
         <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8">
           <ArrowLeft className="h-4 w-4" />

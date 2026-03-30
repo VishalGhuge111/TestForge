@@ -129,7 +129,7 @@ export default function ResultsPage() {
 
   if (testCases.length === 0) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+      <main className="min-h-screen bg-linear-to-br from-background via-background to-muted">
         <div className="container mx-auto px-4 py-8">
           <Link href="/generate" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8">
             <ArrowLeft className="h-4 w-4" />
@@ -205,7 +205,7 @@ export default function ResultsPage() {
   });
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+    <main className="min-h-screen bg-linear-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-8">
         <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8">
           <ArrowLeft className="h-4 w-4" />
