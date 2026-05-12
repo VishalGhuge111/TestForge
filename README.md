@@ -1,69 +1,67 @@
 # TestForge
 
-**Developer-focused API inspection and testing utility.**
+**HTTP inspection and testing utility built for developers.**
 
-A lightweight, self-contained HTTP request builder and response debugger. Send requests, inspect responses, manage history, and debug API behavior—no backend database, no auth complexity, no dependencies beyond React and Next.js.
+A self-contained request builder and response debugger. Send requests, inspect responses, manage history, and debug API behavior — no database, no auth layer, no dependencies beyond React and Next.js.
 
 ---
 
 ## Overview
 
-TestForge is a practical tool for developers who need to inspect, test, and debug HTTP APIs without the overhead of heavier platforms. It provides:
+TestForge is built for developers who need to inspect, test, and debug HTTP APIs without the overhead of heavier platforms. It provides:
 
-- **Server-side request execution** — All requests routed through a Next.js backend to avoid CORS issues and provide proper error categorization.
-- **Request persistence** — Save up to 30 recent requests in localStorage for quick iteration and replay.
-- **Response inspection** — View status codes, headers, timing, and formatted JSON responses.
-- **Error clarity** — Automatic detection and explanation of common failures (timeouts, auth issues, rate limits, network errors).
-- **Lightweight architecture** — No databases, no user accounts, no billing. Deploy and run locally or on any Node.js host.
+- **Server-side request execution** — Every request proxied through a Next.js backend, eliminating CORS and providing consistent error categorization.
+- **Request persistence** — Up to 30 recent requests stored in localStorage for quick iteration and replay.
+- **Response inspection** — Status codes, headers, timing, payload size, and formatted JSON — all in one view.
+- **Error clarity** — Automatic detection and classification of common failures: timeouts, auth rejections, rate limits, network errors.
+- **Lightweight by design** — No databases, no accounts, no billing. Runs locally or on any Node.js host.
 
-**Philosophy:** Build tools for engineers, not dashboards for stakeholders. Focus on request/response clarity, local persistence, and zero setup overhead.
+**Philosophy:** Tools for engineers, not dashboards for stakeholders. Request/response clarity, local persistence, zero setup.
 
 ---
 
 ## Features
 
 ### Request Configuration
-- URL entry with method selection (GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS)
+- URL input with full method selection: GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
 - Headers editor with quick-add interface
-- Request body editor for JSON payloads
-- Authentication support (Bearer token, Basic auth)
-- Custom timeout configuration per request
-- Request cancellation at any time
+- JSON request body editor
+- Authentication: Bearer token and Basic auth
+- Per-request timeout configuration
+- In-flight request cancellation
 
 ### Response Analysis
-- Live status code display with semantic coloring
+- Status code display with semantic color coding
 - Response timing and payload size metrics
-- Header inspection in dedicated tab
+- Dedicated headers inspection tab
 - Formatted JSON viewer with collapsible tree structure
-- Syntax highlighting for readability
+- Syntax highlighting throughout
 - Download option for large payloads (>500KB)
 
 ### Request Management
-- Automatic history tracking (last 30 requests)
-- Save/load requests with explicit naming
-- Favorite requests for quick access
-- One-click request replay
-- Copy/export as production-ready cURL commands
-- Search and filter history
+- Automatic history tracking — last 30 requests
+- Named save/load for explicit request storage
+- Favorites for frequent endpoints
+- One-click replay
+- Export as production-ready cURL commands
+- Full-text search and filter across history
 
 ### Error Diagnostics
-- Automatic error categorization (timeout, CORS, auth, rate limit, network, parse)
-- Context-aware suggestions for common failures
-- Detailed error messages with actionable fixes
+- Automatic error categorization: timeout, CORS, auth, rate limit, network, parse
+- Context-aware fix suggestions per failure type
 - Rate limit header detection and display
 
 ### Developer Experience
-- Dark mode by default with light mode toggle
-- Keyboard shortcuts: `Cmd/Ctrl+Enter` to send request
-- Responsive design for desktop and mobile
-- Zero setup required—just run and use
-- Privacy-first: all data stays in localStorage
+- Dark mode default with light mode toggle
+- `Cmd/Ctrl+Enter` to fire requests
+- Responsive across desktop and mobile
+- Zero config to start — clone, install, run
+- Privacy-first: all data stays in localStorage, nothing leaves the device
 
 ### Optional AI Assistance
-- Error explanation and debugging suggestions via OpenAI API
-- Request failure analysis with recommended fixes
-- Only activates when `OPENAI_API_KEY` is configured
-- Works perfectly fine without it—all core features function locally
+- Error explanation and fix suggestions powered by OpenAI API
+- Activates only when `OPENAI_API_KEY` is set
+- All core features work fully without it
 
 ---
 
@@ -72,49 +70,49 @@ TestForge is a practical tool for developers who need to inspect, test, and debu
 ### Main Inspector Workspace
 ![Inspector Workspace](./public/inspector.png)
 
-Full split-panel API inspection workspace with request builder, response viewer, assertions, collections, and environment management.
+Split-panel workspace: request builder, response viewer, assertions, collections, and environment management.
 
 ---
 
 ### GET Request Testing
 ![GET Request](./public/get-method.png)
 
-Testing REST endpoints with saved collections, reusable environments, assertions, and formatted JSON response inspection.
+REST endpoint testing with saved collections, reusable environments, assertions, and formatted JSON inspection.
 
 ---
 
 ### POST Request Workflow
 ![POST Request](./public/post-method.png)
 
-Sending POST requests with JSON payloads, custom headers, response validation, and structured response analysis.
+POST with JSON payloads, custom headers, response validation, and structured response analysis.
 
 ---
 
 ### PUT Request & Response Validation
 ![PUT Request](./public/put-method.png)
 
-Updating API resources with request body editing, status assertions, response metrics, and debug insights.
+Resource updates with request body editing, status assertions, response metrics, and debug insights.
 
 ---
 
 ### Saved Requests & Recent Activity
 ![Saved Requests](./public/saved-recent.png)
 
-Collection-based request management with replay support, request history tracking, and local persistence.
+Collection-based request management with replay, history tracking, and local persistence.
 
 ---
 
 ### AI Error Diagnostics
 ![Error Diagnostics](./public/error-explanations.png)
 
-Automatic error categorization with contextual debugging assistance, suggested fixes, and AI-assisted explanations.
+Automatic error categorization with contextual debugging, suggested fixes, and AI-assisted explanations.
 
 ---
 
 ### Documentation System
 ![Documentation](./public/docs.png)
 
-Built-in documentation and onboarding system covering request workflows, testing features, debugging, and platform usage.
+Built-in docs covering request workflows, testing, debugging, and platform usage.
 
 ---
 
@@ -127,53 +125,53 @@ User Input (RequestBuilder)
     ↓
 Next.js Frontend validates input
     ↓
-POST /api/request (with config object)
+POST /api/request (config object)
     ↓
 Backend: timeout wrapper + AbortController
     ↓
-fetch() external API with proper headers/auth
+fetch() → external API with headers/auth
     ↓
-Catch errors → categorize by type
+Catch errors → classify by type
     ↓
 Return { status, headers, body, timing, error }
     ↓
 Frontend: parse JSON, render response
     ↓
-Optionally: send to OpenAI for diagnostics (if OPENAI_API_KEY set)
+Optional: POST to OpenAI for diagnostics (if OPENAI_API_KEY set)
 ```
 
 ### Key Design Patterns
 
 #### Server-Side Proxy
-All HTTP requests flow through `/api/request` instead of executing directly from the browser. This provides:
+All HTTP requests route through `/api/request` rather than executing directly in the browser:
 - **CORS elimination** — No browser origin restrictions
-- **Timeout enforcement** — Server-side timeout control with AbortController
-- **Error clarity** — Consistent error handling and categorization
-- **Security** — Auth credentials never exposed to client
+- **Timeout enforcement** — AbortController-based cancellation runs server-side
+- **Error consistency** — Single error handling path for all request types
+- **Credential safety** — Auth headers never reach the client bundle
 
 #### localStorage Persistence
-Request history and saved tests are stored in browser localStorage:
-- Maximum 30 items per collection (automatic eviction of oldest)
-- Only request metadata stored (URL, method, headers, body, timestamp)
-- Full response bodies not persisted (saves space)
-- Survives page refreshes; cleared when localStorage is wiped
+Request history and saved collections live entirely in browser localStorage:
+- 30-item cap per collection with automatic eviction of oldest entries
+- Metadata only: URL, method, headers, body, timestamp
+- Response bodies are not persisted (storage efficiency)
+- Survives page refreshes; cleared on localStorage wipe
 
 #### Error Categorization
-Errors are classified into categories with suggested fixes:
+Every failure is classified with a targeted fix suggestion:
 ```typescript
-'timeout'   → Request exceeded time limit
-'cors'      → Browser origin not allowed (shouldn't happen with proxy)
-'auth'      → 401/403 status codes
-'rateLimit' → 429 status or explicit headers
-'network'   → Connection failed or DNS issues
-'parse'     → Invalid JSON in response body
+'timeout'   → Request exceeded configured time limit
+'cors'      → Browser origin blocked (bypassed via proxy; shouldn't occur)
+'auth'      → 401/403 response codes
+'rateLimit' → 429 status or rate limit headers present
+'network'   → Connection failure or DNS resolution error
+'parse'     → Response body is not valid JSON
 ```
 
 #### Lazy JSON Expansion
-Large response bodies (>100KB) are rendered with a collapsible tree:
-- Only expand sections when user clicks
-- Prevents UI freeze on massive payloads
-- >500KB responses show truncated preview with download link
+Large response bodies render as a collapsed tree by default:
+- Sections expand on click — no upfront render of the full payload
+- Prevents UI thread blocking on large responses
+- Payloads exceeding 500KB show a truncated preview with a download link
 
 ### API Routes
 
@@ -181,23 +179,23 @@ Large response bodies (>100KB) are rendered with a collapsible tree:
 |-------|--------|---------|
 | `/api/request` | POST | Execute HTTP request with timeout/cancellation |
 | `/api/history` | GET | Retrieve stored request history |
-| `/api/history` | DELETE | Clear history or remove specific requests |
-| `/api/ai/explain` | POST | Get AI explanation of error (if OpenAI configured) |
-| `/api/ai/suggest` | POST | Get suggested fixes from AI (if OpenAI configured) |
+| `/api/history` | DELETE | Clear history or remove specific entries |
+| `/api/ai/explain` | POST | AI error explanation (requires OpenAI key) |
+| `/api/ai/suggest` | POST | AI fix suggestions (requires OpenAI key) |
 
 ### Core Modules
 
 | Module | Purpose |
 |--------|---------|
 | `lib/types.ts` | TypeScript definitions for requests, responses, errors |
-| `lib/utils.ts` | Utility functions (JSON parsing, formatting) |
+| `lib/utils.ts` | JSON parsing, formatting, shared utilities |
 | `lib/error-categorizer.ts` | Error classification logic |
-| `lib/curl-builder.ts` | Generate cURL commands from request config |
-| `lib/request-history-manager.ts` | localStorage management |
-| `components/RequestBuilder.tsx` | Request configuration form |
-| `components/ResponseViewer.tsx` | Response display and state |
-| `components/JSONViewer.tsx` | Collapsible JSON tree |
-| `components/HistoryPanel.tsx` | Request history and search |
+| `lib/curl-builder.ts` | cURL command generation from request config |
+| `lib/request-history-manager.ts` | localStorage read/write management |
+| `components/RequestBuilder.tsx` | Request configuration UI |
+| `components/ResponseViewer.tsx` | Response rendering and state management |
+| `components/JSONViewer.tsx` | Collapsible JSON tree component |
+| `components/HistoryPanel.tsx` | Request history list and search |
 
 ---
 
@@ -209,17 +207,17 @@ Large response bodies (>100KB) are rendered with a collapsible tree:
 | **Language** | TypeScript 5.7 |
 | **React** | React 19 |
 | **Styling** | Tailwind CSS 4.2 |
-| **Components** | shadcn/ui (Radix UI based) |
+| **Components** | shadcn/ui (Radix UI) |
 | **Icons** | Lucide Icons |
-| **Forms** | React Hook Form + Zod validation |
-| **Charts** | Recharts 2.15 (for metrics) |
+| **Forms** | React Hook Form + Zod |
+| **Charts** | Recharts 2.15 |
 | **Storage** | Browser localStorage |
 | **HTTP** | Native fetch API |
 | **Deployment** | Vercel Analytics ready |
 
 ---
 
-## Request Flow Example
+## Request Flow Examples
 
 ### GET Request
 
@@ -307,21 +305,21 @@ Authorization: Bearer <token>
 
 ## Environment Variables
 
-TestForge works completely without configuration, but supports optional AI diagnostics:
+TestForge runs without any configuration. AI diagnostics are opt-in:
 
 ```bash
-# Optional: Enable AI-assisted error explanations and suggestions
+# Optional: Enable AI-assisted error explanations and fix suggestions
 OPENAI_API_KEY=sk_...
 
-# Optional: Set custom OpenAI model (defaults to gpt-4o-mini)
+# Optional: Override default model (defaults to gpt-4o-mini)
 OPENAI_MODEL=gpt-4-turbo
 ```
 
-**Important:**
-- `OPENAI_API_KEY` is **completely optional**
-- All core features (request building, history, error categorization) function without it
-- Local error detection and suggestions work offline
-- AI features only enhance diagnostics when the key is provided
+**Notes:**
+- `OPENAI_API_KEY` is entirely optional
+- Request building, history, and error categorization all work without it
+- Local error detection runs fully offline
+- AI features activate only when the key is present
 
 ---
 
@@ -334,7 +332,7 @@ OPENAI_MODEL=gpt-4-turbo
 ### Installation
 
 ```bash
-# Clone repository
+# Clone the repository
 git clone https://github.com/VishalGhuge111/TestForge.git
 cd testforge
 
@@ -354,7 +352,7 @@ pnpm dev
 # Open http://localhost:3000
 ```
 
-Hot module reloading enabled. Edits to `app/` or `components/` reflect instantly in the browser.
+HMR enabled. Changes to `app/` or `components/` reflect immediately in the browser.
 
 ### Production Build
 
@@ -362,8 +360,6 @@ Hot module reloading enabled. Edits to `app/` or `components/` reflect instantly
 pnpm build
 pnpm start
 ```
-
-Built with Next.js static generation and bundle optimization.
 
 ### Linting
 
@@ -390,10 +386,10 @@ testforge/
 │   └── docs/page.tsx
 │
 ├── components/
-│   ├── RequestBuilder.tsx           # Request form
-│   ├── ResponseViewer.tsx           # Response display
-│   ├── JSONViewer.tsx               # JSON tree
-│   ├── HistoryPanel.tsx             # Request history
+│   ├── RequestBuilder.tsx           # Request configuration form
+│   ├── ResponseViewer.tsx           # Response display and state
+│   ├── JSONViewer.tsx               # Collapsible JSON tree
+│   ├── HistoryPanel.tsx             # History list and search
 │   └── ai-insights/
 │       ├── AIInsights.tsx
 │       ├── ExplainErrorButton.tsx
@@ -418,76 +414,76 @@ testforge/
 ## Engineering Decisions
 
 ### 1. Server-Side Request Proxy
-**Decision:** All external API requests execute through `/api/request` on the backend instead of direct browser fetch.
+**Decision:** All external requests execute through `/api/request` on the backend, not via direct browser fetch.
 
 **Why:**
-- Eliminates CORS errors
-- Enforces timeout/cancellation server-side
-- Matches real production architecture
+- Eliminates CORS errors unconditionally
+- Timeout and cancellation enforced server-side via AbortController
+- Mirrors real production request architecture
 
-**Tradeoff:** One extra network hop (negligible for API debugging).
+**Tradeoff:** One additional network hop — negligible at debugging timescales.
 
 ### 2. No Backend Database
-**Decision:** Use browser localStorage only; no server-side persistence.
+**Decision:** localStorage only. No server-side persistence layer.
 
 **Why:**
-- Zero infrastructure to deploy
-- Works offline
-- Privacy-first; data never leaves the device
+- Zero infrastructure required to deploy or self-host
+- Works fully offline
+- Data never leaves the device — privacy by default
 
-**Constraint:** Single device; 30-request limit per collection.
+**Constraint:** Single-device scope; 30-request cap per collection.
 
 ### 3. Optional AI Diagnostics
-**Decision:** AI explanations only activate when `OPENAI_API_KEY` is configured.
+**Decision:** AI features gate behind `OPENAI_API_KEY`. Core tool is fully functional without it.
 
 **Why:**
-- Core tool works without any API key
-- No vendor lock-in
-- AI is enhancement, not requirement
+- No external dependency required to use the tool
+- No vendor lock-in for teams that can't use OpenAI
+- AI is an enhancement layer, not a core dependency
 
-**Tradeoff:** Advanced diagnostics need external API.
+**Tradeoff:** Advanced diagnostics require an external API call and key.
 
 ### 4. No Authentication System
-**Decision:** Zero user accounts; local-only storage.
+**Decision:** No user accounts. Local storage only.
 
 **Why:**
-- No signup/login friction
-- Smaller codebase
-- Privacy by default
+- No signup friction
+- Smaller, auditable codebase
+- Privacy-first by architecture
 
-**Constraint:** Single device; no team workspaces.
+**Constraint:** No cross-device sync or team workspaces.
 
 ### 5. Lazy JSON Expansion
-**Decision:** Only expand JSON sections when user clicks; collapsible tree for large responses.
+**Decision:** JSON trees render collapsed; sections expand on user interaction.
 
 **Why:**
-- Handles massive payloads without UI freeze
-- Developer controls inspection depth
-- Reduces initial render time
+- Handles arbitrarily large response payloads without blocking the UI thread
+- Keeps initial render fast regardless of payload size
+- Developer controls exactly what gets inspected
 
-**Tradeoff:** Slight delay on first expansion.
+**Tradeoff:** Minor delay on first tree expansion.
 
 ---
 
-## Future Improvements
+## Planned Improvements
 
-- **Import/Export Collections** — Save and share request collections as JSON
-- **HAR Format Support** — Import/export .har files for tooling interop
-- **Team Workspaces** — Cloud sync for shared collections (optional)
-- **Advanced Assertions** — Chainable assertion evaluation
-- **Request Tabs** — Multiple concurrent requests
+- **Import/Export Collections** — Serialize and share request collections as JSON
+- **HAR Format Support** — Import/export `.har` files for tooling interoperability
+- **Team Workspaces** — Optional cloud sync for shared collections
+- **Advanced Assertions** — Composable, chainable assertion chains
+- **Request Tabs** — Run and compare multiple requests concurrently
 - **GraphQL Support** — Query builder with schema introspection
-- **Webhook Debugging** — Local endpoint for incoming webhooks
-- **Performance Profiling** — Request phase timing breakdown
+- **Webhook Debugging** — Local listener endpoint for incoming webhook inspection
+- **Performance Profiling** — Per-phase request timing breakdown (DNS, TLS, TTFB, transfer)
 
 ---
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for full text.
+MIT. See [LICENSE](LICENSE) for full text.
 
 ---
 
 ## Contributing
 
-Feedback and bug reports welcome. Open an issue to discuss improvements or report problems.
+Bug reports and feedback welcome. Open an issue to discuss problems or proposed changes.

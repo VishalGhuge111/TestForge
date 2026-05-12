@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Navbar } from '@/components/navbar';
 import {
-  ChevronDown, Code2, Zap, TestTube, Menu, X,
+  ChevronDown, Code2, Zap, Menu, X,
   Shield, History, AlertCircle, Keyboard, BookOpen,
   Layers, Terminal, GitBranch, Database, Settings
 } from 'lucide-react';
@@ -32,16 +32,6 @@ const docSections: DocSection[] = [
       { id: 'http-methods', title: 'HTTP Methods' },
       { id: 'authentication', title: 'Authentication' },
       { id: 'headers', title: 'Headers & Body' },
-    ],
-  },
-  {
-    id: 'test-generation',
-    title: 'Test Generation',
-    subsections: [
-      { id: 'intro-test-gen', title: 'Introduction' },
-      { id: 'generating-tests', title: 'Generating Tests' },
-      { id: 'test-frameworks', title: 'Test Frameworks' },
-      { id: 'edge-cases', title: 'Edge Case Detection' },
     ],
   },
   {
@@ -185,11 +175,6 @@ function OverviewSection() {
       desc: 'Fire HTTP requests directly from your browser. Configure method, headers, auth, and body — then inspect the full response with formatted JSON, timing data, and status metadata.',
     },
     {
-      icon: <TestTube className="w-6 h-6 text-accent" />,
-      title: 'Test Generator',
-      desc: 'After inspecting a response, one click generates a complete, runnable test suite in Jest, Vitest, Mocha, or Supertest. Tests cover happy paths, edge cases, and error scenarios.',
-    },
-    {
       icon: <History className="w-6 h-6 text-blue-400" />,
       title: 'Request History',
       desc: 'TestForge stores your last 30 requests locally. Replay any past call instantly, star favorites, and diff responses across runs — your full debugging session is always one click away.',
@@ -214,7 +199,7 @@ function OverviewSection() {
   return (
     <section>
       <h1 className="text-4xl font-bold mb-2 dark:text-white text-black">TestForge Documentation</h1>
-      <Lead>TestForge is a browser-based API inspection and test-generation workbench. Quickly fire HTTP requests, explore responses, and export production-ready test suites — all from a single interface.</Lead>
+      <Lead>TestForge is a browser-based API inspection and debugging workspace. Quickly fire HTTP requests, inspect responses, validate assertions, and debug APIs from a single interface.</Lead>
 
       <TableOfContents items={[
         { href: '#features', label: 'Core Features' },
@@ -240,7 +225,7 @@ function OverviewSection() {
       <ol className="list-decimal ml-5 space-y-3 text-sm text-muted-foreground mb-6">
         <li><strong className="dark:text-white text-black">Browser UI</strong> — A Next.js app where you configure and send requests. All state (history, saved tests, environment variables) lives in <InlineCode>localStorage</InlineCode> — nothing is sent to our servers.</li>
         <li><strong className="dark:text-white text-black">Server-side proxy</strong> — Your request is forwarded through a lightweight Next.js API route (<InlineCode>/api/request</InlineCode>). This eliminates CORS errors and prevents credentials from appearing in browser network logs.</li>
-        <li><strong className="dark:text-white text-black">AI layer</strong> — An optional local AI model analyses the response structure and generates test cases, assertion suggestions, and error diagnostics. The model runs on your machine when available, or calls a privacy-respecting cloud endpoint as a fallback.</li>
+        <li><strong className="dark:text-white text-black">AI layer</strong> — An optional local AI model analyses the response structure and provides assertion suggestions, diagnostics, and debugging help. The model runs on your machine when available, or calls a privacy-respecting cloud endpoint as a fallback.</li>
       </ol>
 
       <Note>TestForge never stores your API payloads, tokens, or responses on any server. The proxy is stateless and processes each request independently.</Note>
@@ -254,7 +239,7 @@ function OverviewSection() {
           ['1', 'Read the Quick Start guide to fire your first request in under a minute.'],
           ['2', 'Take the Interface Tour to understand all three panels.'],
           ['3', 'Visit API Inspection → Making Requests for detailed configuration options.'],
-          ['4', 'Generate your first test suite from Test Generation → Generating Tests.'],
+          ['4', 'Explore Assertions and Debug Insights to validate responses and diagnose failures.'],
         ].map(([n, t]) => (
           <div key={n} className="flex gap-3 items-start text-sm text-muted-foreground">
             <span className="shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary text-xs flex items-center justify-center font-bold">{n}</span>
@@ -277,7 +262,6 @@ function QuickStartSection() {
         { href: '#url', label: 'Enter an API URL' },
         { href: '#configure', label: 'Configure the Request' },
         { href: '#send', label: 'Send & Inspect' },
-        { href: '#generate', label: 'Generate Tests' },
         { href: '#prereqs', label: 'Prerequisites' },
       ]} />
 
@@ -323,11 +307,6 @@ api.example.com/v1/users`}</CodeBlock>
         <li>Response headers as a collapsible key-value list</li>
         <li>Response body as syntax-highlighted, collapsible JSON (or raw text for non-JSON)</li>
       </ul>
-
-      <SubHeading id="generate">Step 5 — Generate Tests</SubHeading>
-      <P>Once a response is loaded, the <strong className="dark:text-white text-black">Generate Tests</strong> button appears at the top of the Response panel. Click it, choose a framework (Jest, Vitest, Mocha, Supertest), and TestForge produces a complete test file you can copy directly into your project.</P>
-
-      <Warning>Test generation requires the AI layer to be enabled. Check Settings → AI Assistant to confirm it's active.</Warning>
     </section>
   );
 }
@@ -392,7 +371,6 @@ function InterfaceTourSection() {
         <li><strong className="dark:text-white text-black">Body tab</strong> — collapsible, syntax-highlighted JSON viewer; Copy button in the top-right corner</li>
         <li><strong className="dark:text-white text-black">Headers tab</strong> — full response headers as a searchable table</li>
         <li><strong className="dark:text-white text-black">Assertions tab</strong> — attach lightweight checks to the last response (see Assertions guide)</li>
-        <li><strong className="dark:text-white text-black">Generate Tests button</strong> — triggers AI test generation for the current response</li>
       </ul>
 
       <SubHeading id="mobile">Mobile Layout</SubHeading>
@@ -620,313 +598,6 @@ Accept: application/vnd.api+json;version=2`}</CodeBlock>
 
       <SubHeading id="size">Body Size Limits</SubHeading>
       <P>The proxy accepts request bodies up to <strong>5 MB</strong>. For larger payloads (e.g. file uploads), consider using a dedicated tool or the Multipart option (coming soon). Attempting to send a body over the limit returns a <InlineCode>413 Payload Too Large</InlineCode> error from the proxy itself.</P>
-    </section>
-  );
-}
-
-function IntroTestGenSection() {
-  return (
-    <section>
-      <SectionHeading>AI-Powered Test Generation</SectionHeading>
-      <Lead>TestForge's test generator analyses your API response and produces a complete, runnable test suite — covering status codes, schema validation, edge cases, and error paths — in seconds.</Lead>
-
-      <TableOfContents items={[
-        { href: '#how', label: 'How Generation Works' },
-        { href: '#what', label: 'What Gets Generated' },
-        { href: '#quality', label: 'Test Quality & Coverage' },
-        { href: '#limits', label: 'Limitations' },
-      ]} />
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
-        {[
-          { icon: <Zap className="w-5 h-5 text-primary" />, title: 'One-Click', desc: 'Click Generate Tests after any successful response. No configuration needed to get started.' },
-          { icon: <BookOpen className="w-5 h-5 text-accent" />, title: 'Multi-Framework', desc: 'Export for Jest, Vitest, Mocha, or Supertest. Switch frameworks without re-running the request.' },
-          { icon: <AlertCircle className="w-5 h-5 text-yellow-400" />, title: 'Edge Cases', desc: 'Automatically generates tests for null values, empty arrays, type mismatches, and error responses.' },
-          { icon: <Shield className="w-5 h-5 text-green-400" />, title: 'Private', desc: 'The AI model runs locally where possible. Your API data does not leave your machine for generation.' },
-        ].map((c) => (
-          <div key={c.title} className="flex gap-3 p-4 rounded-lg border border-border/20 bg-muted/10">
-            <div className="shrink-0 mt-0.5">{c.icon}</div>
-            <div>
-              <p className="text-sm font-semibold dark:text-white text-black mb-1">{c.title}</p>
-              <p className="text-xs text-muted-foreground">{c.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <SubHeading id="how">How Generation Works</SubHeading>
-      <P>When you click <strong>Generate Tests</strong>, TestForge sends the following context to the AI model:</P>
-      <ol className="list-decimal ml-5 space-y-1.5 text-sm text-muted-foreground mb-4">
-        <li>The HTTP method and URL path (not the full URL — the host is stripped for privacy)</li>
-        <li>The response status code and Content-Type</li>
-        <li>The full response body (up to 50 KB; larger responses are summarised)</li>
-        <li>Any assertions you have already defined for this request</li>
-      </ol>
-      <P>The model infers the response schema, identifies key fields, detects nullable properties, and constructs test assertions accordingly. It also generates negative tests based on common failure modes for the endpoint type.</P>
-
-      <SubHeading id="what">What Gets Generated</SubHeading>
-      <P>A typical generated test file includes:</P>
-      <ul className="list-disc ml-5 space-y-1.5 text-sm text-muted-foreground mb-4">
-        <li>A <InlineCode>describe</InlineCode> block named after the endpoint</li>
-        <li>Status code assertion (<InlineCode>expect(response.status).toBe(200)</InlineCode>)</li>
-        <li>Content-Type header assertion</li>
-        <li>Schema shape assertions (top-level keys, nested object structure)</li>
-        <li>Type assertions for critical fields (e.g. ID is a number, email is a string)</li>
-        <li>Negative cases for missing auth, invalid IDs, and missing required fields</li>
-        <li>Response time assertion (<InlineCode>expect(duration).toBeLessThan(2000)</InlineCode>)</li>
-      </ul>
-
-      <SubHeading id="quality">Test Quality & Coverage</SubHeading>
-      <P>Generated tests are a strong starting point, not a complete test suite. You should review and expand them:</P>
-      <ul className="list-disc ml-5 space-y-1.5 text-sm text-muted-foreground mb-4">
-        <li>Add business-logic assertions the AI can't infer from a single response snapshot.</li>
-        <li>Add tests for authenticated vs. unauthenticated access if your API has role-based access control.</li>
-        <li>Parameterise tests to run against multiple environments using environment variables.</li>
-      </ul>
-
-      <SubHeading id="limits">Limitations</SubHeading>
-      <ul className="list-disc ml-5 space-y-1.5 text-sm text-muted-foreground">
-        <li>Test generation requires a successful response (2xx). Error responses can be tested with the Assertions panel instead.</li>
-        <li>Response bodies larger than 50 KB are truncated before analysis — the AI may miss deep-nested fields.</li>
-        <li>Generated tests target the response snapshot at the time of generation. Live APIs change; re-generate tests after API updates.</li>
-        <li>The AI model does not have access to your source code or OpenAPI spec, so generated tests may use placeholder descriptions.</li>
-      </ul>
-    </section>
-  );
-}
-
-function GeneratingTestsSection() {
-  return (
-    <section>
-      <SectionHeading>Generating Tests</SectionHeading>
-      <Lead>A step-by-step walkthrough for producing your first test file from a live API response.</Lead>
-
-      <TableOfContents items={[
-        { href: '#workflow', label: 'Full Workflow' },
-        { href: '#choose', label: 'Choosing a Framework' },
-        { href: '#output', label: 'Reading the Output' },
-        { href: '#export', label: 'Exporting & Using Tests' },
-        { href: '#regen', label: 'Re-generating & Updating' },
-      ]} />
-
-      <SubHeading id="workflow">Full Workflow</SubHeading>
-      <div className="space-y-4">
-        {[
-          { n: '1', t: 'Send an API Request', d: 'Configure your endpoint and click Send Request. Wait for the response to appear in the right panel.' },
-          { n: '2', t: 'Review the Response', d: 'Check the status code and body. The AI generates better tests when given a representative, successful response rather than an error.' },
-          { n: '3', t: 'Click Generate Tests', d: 'The Generate Tests button appears at the top of the Response panel once a response is loaded. Click it to open the test generation modal.' },
-          { n: '4', t: 'Choose a Framework', d: 'Select Jest, Vitest, Mocha, or Supertest from the framework dropdown in the modal.' },
-          { n: '5', t: 'Wait for Generation', d: 'The AI processes the response — typically 2–8 seconds. A spinner indicates progress. Generation runs locally if the local AI model is enabled.' },
-          { n: '6', t: 'Review & Export', d: 'The generated code appears in a syntax-highlighted editor. Review it, make inline edits if needed, then click Copy or Download to export it.' },
-        ].map(({ n, t, d }) => (
-          <div key={n} className="flex gap-4 p-4 rounded-lg border border-border/20">
-            <span className="shrink-0 w-7 h-7 rounded-full bg-primary/20 text-primary text-xs flex items-center justify-center font-bold">{n}</span>
-            <div>
-              <p className="text-sm font-semibold dark:text-white text-black mb-1">{t}</p>
-              <p className="text-xs text-muted-foreground">{d}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <SubHeading id="choose">Choosing a Framework</SubHeading>
-      <P>Your choice of framework affects the import statements and assertion syntax in the output — the underlying test logic is identical. Choose based on your project's existing setup:</P>
-      <ul className="list-disc ml-5 space-y-1.5 text-sm text-muted-foreground mb-4">
-        <li><strong className="dark:text-white text-black">Jest</strong> — best for React / Next.js projects (already configured in most CRA / Next setups)</li>
-        <li><strong className="dark:text-white text-black">Vitest</strong> — best for Vite-based projects; near-identical API to Jest, dramatically faster</li>
-        <li><strong className="dark:text-white text-black">Mocha</strong> — best for legacy Node.js projects; pair with Chai for assertions</li>
-        <li><strong className="dark:text-white text-black">Supertest</strong> — best for testing Express / Fastify routes from inside the same codebase</li>
-      </ul>
-
-      <SubHeading id="output">Reading the Output</SubHeading>
-      <CodeBlock>{`// Generated by TestForge — GET /api/users/42
-import { describe, it, expect, beforeAll } from 'vitest';
-
-describe('GET /api/users/:id', () => {
-  let response;
-  let data;
-
-  beforeAll(async () => {
-    response = await fetch('https://api.example.com/api/users/42', {
-      headers: { Authorization: 'Bearer <YOUR_TOKEN>' },
-    });
-    data = await response.json();
-  });
-
-  it('returns 200 OK', () => {
-    expect(response.status).toBe(200);
-  });
-
-  it('returns JSON content-type', () => {
-    expect(response.headers.get('content-type')).toContain('application/json');
-  });
-
-  it('response has expected shape', () => {
-    expect(data).toHaveProperty('id');
-    expect(data).toHaveProperty('name');
-    expect(data).toHaveProperty('email');
-  });
-
-  it('id is a number', () => {
-    expect(typeof data.id).toBe('number');
-  });
-
-  it('responds within 2 seconds', async () => {
-    const start = Date.now();
-    await fetch('https://api.example.com/api/users/42');
-    expect(Date.now() - start).toBeLessThan(2000);
-  });
-});`}</CodeBlock>
-
-      <SubHeading id="export">Exporting & Using Tests</SubHeading>
-      <P>Click <strong>Download</strong> to save the file as <InlineCode>testforge-{'{'}endpoint{'}'}.test.ts</InlineCode> (or <InlineCode>.test.js</InlineCode> for non-TypeScript frameworks). Move it to your project's test directory and run:</P>
-      <CodeBlock>{`# Jest / Vitest
-npx vitest run src/__tests__/testforge-users.test.ts
-
-# Mocha
-npx mocha test/testforge-users.test.js`}</CodeBlock>
-
-      <SubHeading id="regen">Re-generating & Updating</SubHeading>
-      <P>When your API schema changes, re-send the request in TestForge and click Generate Tests again. TestForge does not diff against a previous version — the new file completely replaces the old one. Commit your test files to version control before re-generating to preserve any manual edits.</P>
-    </section>
-  );
-}
-
-function TestFrameworksSection() {
-  const frameworks = [
-    { name: 'Jest', tag: 'jest', color: 'red', desc: 'The most widely used JavaScript testing framework. Ships with built-in mocking, snapshot testing, and code coverage. Works out of the box in Create React App and Next.js projects.', install: 'npm install --save-dev jest @types/jest ts-jest', config: 'jest.config.ts' },
-    { name: 'Vitest', tag: 'vitest', color: 'green', desc: 'A Vite-native test runner with a Jest-compatible API. 10–20× faster than Jest on large test suites due to native ESM support and Vite\'s module graph caching.', install: 'npm install --save-dev vitest', config: 'vite.config.ts (test: { ... })' },
-    { name: 'Mocha', tag: 'mocha', color: 'yellow', desc: 'A flexible, minimal test runner for Node.js. Requires a separate assertion library (Chai, should.js) and an HTTP client (Axios, node-fetch). Best for legacy or non-bundled projects.', install: 'npm install --save-dev mocha chai @types/mocha', config: '.mocharc.json' },
-    { name: 'Supertest', tag: 'supertest', color: 'blue', desc: 'An HTTP assertion library built on top of Superagent. Used for testing Express / Fastify / Koa applications from the inside — it spins up your server in-process, so no running server is required.', install: 'npm install --save-dev supertest @types/supertest', config: 'Works with Jest or Mocha as the runner' },
-  ];
-
-  return (
-    <section>
-      <SectionHeading>Supported Test Frameworks</SectionHeading>
-      <Lead>TestForge generates tests for four popular frameworks. The underlying assertions are identical — only the syntax and imports differ.</Lead>
-
-      <div className="space-y-6 mt-6">
-        {frameworks.map((f) => (
-          <div key={f.name} id={f.tag} className="rounded-lg border border-border/20 p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <Badge color={f.color}>{f.name}</Badge>
-            </div>
-            <P>{f.desc}</P>
-            <H3>Install</H3>
-            <CodeBlock>{f.install}</CodeBlock>
-            <H3>Config File</H3>
-            <P><InlineCode>{f.config}</InlineCode></P>
-          </div>
-        ))}
-      </div>
-
-      <Divider />
-      <SubHeading>Framework Comparison</SubHeading>
-      <div className="overflow-x-auto">
-        <table className="w-full text-xs border-collapse">
-          <thead>
-            <tr className="border-b border-border/30">
-              {['Framework', 'Speed', 'Setup', 'Mocking', 'Best For'].map((h) => (
-                <th key={h} className="text-left py-2 pr-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="text-muted-foreground">
-            {[
-              ['Jest', 'Medium', 'Easy', 'Built-in', 'React / Next.js'],
-              ['Vitest', 'Fast', 'Easy', 'Built-in', 'Vite projects'],
-              ['Mocha', 'Medium', 'Manual', 'sinon.js', 'Node.js / Legacy'],
-              ['Supertest', 'Fast', 'Easy', 'Via runner', 'Express / Fastify'],
-            ].map(([n, s, se, m, b]) => (
-              <tr key={n} className="border-b border-border/10">
-                <td className="py-2 pr-4 font-medium dark:text-white text-black">{n}</td>
-                <td className="py-2 pr-4">{s}</td>
-                <td className="py-2 pr-4">{se}</td>
-                <td className="py-2 pr-4">{m}</td>
-                <td className="py-2">{b}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
-  );
-}
-
-function EdgeCasesSection() {
-  return (
-    <section>
-      <SectionHeading>Edge Case Detection</SectionHeading>
-      <Lead>TestForge automatically identifies and generates tests for common edge cases that are easy to miss during manual testing.</Lead>
-
-      <TableOfContents items={[
-        { href: '#null', label: 'Null & Undefined Values' },
-        { href: '#empty', label: 'Empty Collections' },
-        { href: '#errors', label: 'HTTP Error Responses' },
-        { href: '#timeout', label: 'Timeout Scenarios' },
-        { href: '#invalid', label: 'Invalid Input Validation' },
-        { href: '#types', label: 'Type Coercion' },
-      ]} />
-
-      <SubHeading id="null">Null & Undefined Values</SubHeading>
-      <P>TestForge inspects the response body for fields that are <InlineCode>null</InlineCode> and generates both positive and defensive tests:</P>
-      <CodeBlock>{`// If 'middleName' is null in the response:
-it('middleName can be null', () => {
-  expect(data.middleName === null || typeof data.middleName === 'string').toBe(true);
-});`}</CodeBlock>
-
-      <SubHeading id="empty">Empty Collections</SubHeading>
-      <P>When an array field is empty in the sample response, TestForge generates tests that handle both the empty and non-empty cases:</P>
-      <CodeBlock>{`it('tags is an array', () => {
-  expect(Array.isArray(data.tags)).toBe(true);
-});
-
-it('handles empty tags array gracefully', () => {
-  // Component / consumer should not throw when tags = []
-  expect(() => processTagList(data.tags)).not.toThrow();
-});`}</CodeBlock>
-
-      <SubHeading id="errors">HTTP Error Responses</SubHeading>
-      <P>TestForge generates skeleton tests for 4xx and 5xx responses even when your sample was a 200. These require you to fill in the trigger conditions:</P>
-      <CodeBlock>{`describe('error handling', () => {
-  it('returns 401 when no auth token is provided', async () => {
-    const res = await fetch(URL); // no Authorization header
-    expect(res.status).toBe(401);
-  });
-
-  it('returns 404 for unknown resource IDs', async () => {
-    const res = await fetch(URL.replace('/42', '/99999'));
-    expect(res.status).toBe(404);
-  });
-
-  it('returns 422 for invalid request body', async () => {
-    const res = await fetch(URL, {
-      method: 'POST',
-      body: JSON.stringify({ email: 'not-an-email' }),
-    });
-    expect(res.status).toBe(422);
-  });
-});`}</CodeBlock>
-
-      <SubHeading id="timeout">Timeout Scenarios</SubHeading>
-      <P>Response time assertions use the actual measured time from your sample request as a baseline, with a 2× buffer:</P>
-      <CodeBlock>{`it('responds within acceptable time', () => {
-  // Baseline from inspection: 142ms → threshold: 500ms
-  expect(responseTime).toBeLessThan(500);
-});`}</CodeBlock>
-
-      <SubHeading id="invalid">Invalid Input Validation</SubHeading>
-      <P>For POST/PUT/PATCH requests, TestForge infers required fields from the request body and generates tests for missing and malformed values.</P>
-
-      <SubHeading id="types">Type Coercion</SubHeading>
-      <P>APIs sometimes return numeric IDs as strings or booleans as integers. TestForge generates strict type assertions based on the observed types in your response:</P>
-      <CodeBlock>{`it('id is a number, not a string', () => {
-  expect(typeof data.id).toBe('number'); // not '42'
-});
-
-it('active is a boolean', () => {
-  expect(typeof data.active).toBe('boolean'); // not 0/1
-});`}</CodeBlock>
     </section>
   );
 }
@@ -1359,9 +1030,8 @@ function LocalAISection() {
 
       <SubHeading>What the AI Does</SubHeading>
       <ul className="list-disc ml-5 space-y-1.5 text-sm text-muted-foreground mb-6">
-        <li><strong className="dark:text-white text-black">Test generation</strong> — analyses response structure and produces runnable test files</li>
-        <li><strong className="dark:text-white text-black">Error explanation</strong> — translates cryptic error codes into plain-English explanations with fix suggestions</li>
         <li><strong className="dark:text-white text-black">Assertion suggestions</strong> — after a response loads, the AI suggests useful assertions based on the response shape</li>
+        <li><strong className="dark:text-white text-black">Error explanation</strong> — translates cryptic error codes into plain-English explanations with fix suggestions</li>
         <li><strong className="dark:text-white text-black">Request body help</strong> — given an endpoint URL and response schema, suggests a valid request body for POST/PUT operations</li>
       </ul>
 
@@ -1372,7 +1042,7 @@ function LocalAISection() {
           ['Local only', 'Never use cloud. AI features are disabled if no local model is available.'],
           ['Local preferred', '(Default) Use local model if available; fall back to cloud otherwise.'],
           ['Cloud only', 'Always use the cloud endpoint. Fastest and most capable.'],
-          ['Disabled', 'Disable all AI features. Test generation is unavailable.'],
+          ['Disabled', 'Disable all AI features.'],
         ].map(([mode, desc]) => (
           <div key={mode as string} className="flex gap-3 text-sm p-3 rounded border border-border/20">
             <InlineCode>{mode as string}</InlineCode>
@@ -1384,7 +1054,7 @@ function LocalAISection() {
       <SubHeading>Privacy & Data Handling</SubHeading>
       <P>When using the cloud endpoint, TestForge sends only the minimum data needed for the AI task: the response body (up to 50 KB), the response status, and the endpoint path (host is stripped). No API keys, no full URLs, no request headers are sent to the AI service.</P>
 
-      <Note>Test generation in local mode requires at least 8 GB of RAM for a 7B parameter model. On lower-memory devices, use "Local preferred" mode and TestForge will use cloud when the device is under memory pressure.</Note>
+      <Note>AI diagnostics in local mode requires at least 8 GB of RAM for a 7B parameter model. On lower-memory devices, use "Local preferred" mode and TestForge will use cloud when the device is under memory pressure.</Note>
     </section>
   );
 }
@@ -1418,7 +1088,7 @@ function ArchitectureSection() {
           { layer: 'Language', tech: 'TypeScript 5', why: 'End-to-end type safety across the request/response pipeline.' },
           { layer: 'Styling', tech: 'Tailwind CSS v3', why: 'Design tokens via CSS variables; utility classes for layout and spacing.' },
           { layer: 'State', tech: 'React useState / useReducer + localStorage', why: 'No external state management library. All persistent state is serialised to localStorage.' },
-          { layer: 'AI (cloud)', tech: 'Custom inference endpoint', why: 'Privacy-respecting cloud fallback for test generation and error explanation.' },
+          { layer: 'AI (cloud)', tech: 'Custom inference endpoint', why: 'Privacy-respecting cloud fallback for debugging help and error explanation.' },
           { layer: 'AI (local)', tech: 'WebLLM / Ollama integration', why: 'Runs a quantised LLM in-browser (WebLLM) or via a local Ollama server.' },
           { layer: 'Testing', tech: 'Vitest + Playwright', why: 'Unit tests for utility functions; end-to-end tests for the inspector workflow.' },
         ].map(({ layer, tech, why }) => (
@@ -1517,8 +1187,8 @@ function FaqSection() {
     { q: 'Can I test WebSocket or GraphQL APIs?', a: 'WebSocket support is on the roadmap. For GraphQL, use HTTP POST requests with a JSON body containing the "query" field — GraphQL over HTTP works perfectly with the standard inspector.' },
     { q: 'Why is my token being masked in history?', a: 'TestForge masks authorization header values in the history panel (showing only the first 8 characters) to prevent credential leakage if you share a screenshot of your history. The full value is used when replaying requests.' },
     { q: 'Can TestForge export to Postman / Insomnia format?', a: 'Collection export currently uses TestForge\'s own JSON format. Postman Collection v2.1 export is on the roadmap. In the meantime, the "Copy as cURL" feature works across most API tools.' },
-    { q: 'What is the maximum response size?', a: 'Response bodies are capped at 10 MB. Bodies over 50 KB are truncated before being sent to the AI for test generation, though the full body is still shown in the inspector.' },
-    { q: 'Does TestForge require an account or API key?', a: 'Core inspection features (request builder, response inspector, history) require no account. AI-powered test generation requires an API key for the cloud fallback mode. Local AI mode has no such requirement.' },
+    { q: 'What is the maximum response size?', a: 'Response bodies are capped at 10 MB. Bodies over 50 KB are truncated before being sent to the AI for diagnostics, though the full body is still shown in the inspector.' },
+    { q: 'Does TestForge require an account or API key?', a: 'Core inspection features (request builder, response inspector, history) require no account. AI-powered diagnostics require an API key for the cloud fallback mode. Local AI mode has no such requirement.' },
   ];
 
   return (
@@ -1548,10 +1218,6 @@ const SECTIONS: Record<string, React.ReactNode> = {
   'http-methods': <HttpMethodsSection />,
   authentication: <AuthenticationSection />,
   headers: <HeadersSection />,
-  'intro-test-gen': <IntroTestGenSection />,
-  'generating-tests': <GeneratingTestsSection />,
-  'test-frameworks': <TestFrameworksSection />,
-  'edge-cases': <EdgeCasesSection />,
   'history-replay': <HistoryReplaySection />,
   'response-inspector': <ResponseInspectorSection />,
   'error-handling': <ErrorHandlingSection />,
@@ -1592,17 +1258,19 @@ export default function DocsPage() {
   };
 
   useEffect(() => {
+    // Desktop: scroll the fixed panel
     if (mainRef.current) {
       mainRef.current.scrollTop = 0;
-      mainRef.current.scrollLeft = 0;
     }
-    window.scrollTo(0, 0);
+    // Mobile: scroll the actual window
+    window.scrollTo({ top: 0, behavior: 'instant' });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, [activeSection]);
 
   return (
-    <div className="h-screen overflow-hidden bg-background text-foreground flex flex-col">
+    // ↓ CHANGE 1: h-screen overflow-hidden → md:h-screen md:overflow-hidden
+    <div className="bg-background text-foreground flex flex-col md:h-screen md:overflow-hidden">
       <Navbar showLaunchButton={false} />
 
       {/* Mobile hamburger */}
@@ -1619,8 +1287,8 @@ export default function DocsPage() {
         </span>
       </div>
 
-      {/* Desktop: full-height row */}
-      <div className="flex-1 flex w-full md:overflow-hidden">
+      {/* ↓ CHANGE 2: added flex-col md:flex-row so mobile stacks, desktop rows */}
+      <div className="flex-1 flex flex-col md:flex-row w-full md:overflow-hidden">
         {/* Mobile backdrop */}
         {mobileOpen && (
           <div
@@ -1629,7 +1297,7 @@ export default function DocsPage() {
           />
         )}
 
-        {/* ── Sidebar ──────────────────────────────────────────────────────── */}
+        {/* Sidebar — unchanged */}
         <aside
           ref={sidebarRef}
           className={[
@@ -1641,7 +1309,6 @@ export default function DocsPage() {
             'md:translate-x-0 md:fixed md:left-0 md:top-[56px] md:bottom-0 md:pt-0 md:w-64 md:z-20',
           ].join(' ')}
         >
-          {/* Mobile close header */}
           <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-border/20">
             <span className="text-sm font-semibold">Docs</span>
             <button onClick={() => setMobileOpen(false)} className="p-1 rounded hover:bg-muted/50 cursor-pointer">
@@ -1684,8 +1351,8 @@ export default function DocsPage() {
           </div>
         </aside>
 
-        {/* ── Main content ────────────────────────────────────────────────── */}
-        <main ref={mainRef} className="flex-1 min-w-0 md:ml-64 overflow-y-auto px-5 sm:px-10 py-8">
+        {/* ↓ CHANGE 3: overflow-y-auto → md:overflow-y-auto (mobile scrolls window, not this div) */}
+        <main ref={mainRef} className="flex-1 min-w-0 md:ml-64 md:overflow-y-auto px-5 sm:px-10 py-8">
           <div className="max-w-none pr-6">
             {SECTIONS[activeSection] ?? (
               <p className="text-muted-foreground">Section not found.</p>
